@@ -11,16 +11,28 @@ export default function OrderSection() {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault()
     setIsLoading(true)
 
-    // Simulate API call
-    setTimeout(() => {
+    const response = await fetch("/api/send-email", {   
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        to: email,
+        subject: "Welcome to AI Palm!",
+        text: "You are in the waiting list for AI Palm So-Arm100",
+      }),
+    })
+    
+    if (response.ok) {
+      alert("Subscription successful! Check your email for updates.")
       setIsLoading(false)
-      setIsSubmitted(true)
-      setEmail("")
-    }, 1500)
+    } else {
+      alert("Subscription failed. Please try again.")
+    }
   }
 
   return (
